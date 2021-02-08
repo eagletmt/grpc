@@ -23,12 +23,7 @@ end
 
 # Add the extension compiler task
 Rake::ExtensionTask.new('grpc_c', spec) do |ext|
-  unless RUBY_PLATFORM =~ /darwin/
-    # TODO: also set "no_native to true" for mac if possible. As is,
-    # "no_native" can only be set if the RUBY_PLATFORM doing
-    # cross-compilation is contained in the "ext.cross_platform" array.
-    ext.no_native = true
-  end
+  ext.no_native = true
   ext.source_pattern = '**/*.{c,h}'
   ext.ext_dir = File.join('src', 'ruby', 'ext', 'grpc')
   ext.lib_dir = File.join('src', 'ruby', 'lib', 'grpc')
@@ -36,7 +31,7 @@ Rake::ExtensionTask.new('grpc_c', spec) do |ext|
   ext.cross_platform = [
     'x86-mingw32', 'x64-mingw32',
     'x86_64-linux', 'x86-linux',
-    'universal-darwin'
+    'x86_64-darwin', 'arm64-darwin',
   ]
   ext.cross_compiling do |spec|
     spec.files = %w( etc/roots.pem grpc_c.32.ruby grpc_c.64.ruby )
